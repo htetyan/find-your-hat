@@ -37,3 +37,19 @@ const myField = new Field([
 
 myField.print();
 myField.print2();
+
+function genField(width, height, percent) {
+
+    let result = "";
+    let fLength = function (width) {
+        for (let i = 0; i < width; i++) {}
+    }
+}
+
+//create following:
+// - random title sector
+// - length printer
+// - height printer
+
+//yet to figure out: 
+//how to add percentage of field to be covered in holes
