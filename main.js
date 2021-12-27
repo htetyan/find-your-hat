@@ -35,8 +35,8 @@ const myField = new Field([
   ["░", "^", "░"],
 ]);
 
-myField.print();
-myField.print2();
+//myField.print();
+//myField.print2();
 
 function genField(width, height, percent) {
 
@@ -47,9 +47,36 @@ function genField(width, height, percent) {
 }
 
 //create following:
-// - random title sector
-// - length printer
-// - height printer
+// [x] random title sector
+// [] length printer
+// [] height printer
 
 //yet to figure out: 
 //how to add percentage of field to be covered in holes
+
+function tileRandom() { 
+    let charArray = [ hole, fieldCharacter]; 
+    return charArray[Math.floor(Math.random()*2)];
+}; 
+
+//console.log(tileRandom());
+
+function printTileLine(size) {
+    let finalLine = "";
+    for (let i=0;i<size;i++) {
+        finalLine += tileRandom();
+    }
+    return finalLine;
+}
+
+//console.log(printTileLine(8)); 
+
+function printTileGrid(size) {
+    let finalGrid = "";
+    for (let i=0;i<size;i++) {
+        finalGrid += printTileLine(size) + "\n";
+    }
+    return finalGrid;
+}
+
+console.log(printTileGrid(10));
