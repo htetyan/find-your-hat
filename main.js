@@ -69,14 +69,48 @@ function printTileLine(size) {
     return finalLine;
 }
 
-//console.log(printTileLine(8)); 
-
-function printTileGrid(size) {
-    let finalGrid = "";
+function printTileLine2(size) {
+    let finalLine = "";
+    let helperArray = [];
     for (let i=0;i<size;i++) {
-        finalGrid += printTileLine(size) + "\n";
+        helperArray.push(tileRandom());
+        finalLine = helperArray.join("");
+    }
+    return finalLine;
+}
+//console.log(printTileLine(8));
+
+function printHatLine(size) {
+    let finalLine = "";
+    let helperArray = [];
+    let hatPositionNumber = Math.floor(Math.random()*size)-1; 
+    for (let i=0; i<size; i++) {
+        if ( i === hatPositionNumber) {
+            helperArray.push(hat);
+        } else {
+            helperArray.push(tileRandom());
+            finalLine = helperArray.join("");
+        }
+    }
+   // console.log(finalLine.length);
+    return finalLine;
+};
+
+//console.log(printHatLine(10));
+        
+function printTileGrid(length, width) {
+    let finalGrid = "";
+    let hatLineNum = Math.floor(Math.random()*length);
+    for (let i=0;i<length;i++) {
+        if ( i === hatLineNum) {
+            finalGrid += printHatLine(width) + "\n";
+        }
+        finalGrid += printTileLine2(width) + "\n";
     }
     return finalGrid;
 }
 
-console.log(printTileGrid(10));
+console.log(printTileGrid(10, 10));
+console.log(printTileGrid(5, 5));
+console.log(printTileGrid(8, 11));
+
