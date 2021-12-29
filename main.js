@@ -180,9 +180,19 @@ function xLocation(array, p1, p2) {
 }
 
 function winOrLose(xloco) {
+    if (xloco === hat) {
+    return console.log("You found your hat!");
+    } else if (xloco === hole) {
+    return console.log("You fell into a whole, game over!");
+    } else if (xloco === undefined) {
+    return console.log("You fell off the map! Game over!");
+    } else {
+    //continue game function?
+    return console.log("continue game");
     //lose condition
     //off the edge
     //win condition
+    }
 }
 /*
 console.log(xLocation(myArrayGrid));
@@ -202,24 +212,23 @@ function inputProcessor(userInput) {
         //move left
         wid -= 1;
         newLocation = myArr[len][wid];
-        //change the index - 1
         //update the moving board
-        //winOrLose(newLocation);
+        winOrLose(newLocation);
     } else if (userInput === "j") {
         //functions
         len += 1;
         newLocation = myArr[len][wid];
-        //winOrLose(newLocation);
+        winOrLose(newLocation);
     } else if (userInput === "k") {
         //functions
         len -= 1;
         newLocation = myArr[len][wid];
-        //winOrLose(newLocation);
+        winOrLose(newLocation);
     } else if (userInput === "l") {
         //functions
         wid += 1;
         newLocation = myArr[len][wid];
-        //winOrLose(newLocation);
+        winOrLose(newLocation);
     } else {
       console.log("Please put in the correct direction inputs: h,j,k or l")
     }
