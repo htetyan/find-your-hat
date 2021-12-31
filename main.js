@@ -111,7 +111,7 @@ function printHatLine(size) {
         
 function printHatArrayLine(size) {
     let helperArray = [];
-    let hatPositionNumber = Math.floor(Math.random()*size)-1; 
+    let hatPositionNumber = Math.floor(Math.random()*size+1); 
     for (let i=0; i<size; i++) {
         if ( i === hatPositionNumber) {
             helperArray.push(hat);
@@ -123,7 +123,7 @@ function printHatArrayLine(size) {
     return helperArray;
 };
 
-console.log(printHatArrayLine(10));
+//console.log(printHatArrayLine(10));
 
 function printTileGrid(length, width) {
     let finalGrid = "";
@@ -146,9 +146,11 @@ let myArrayGrid = [];
 
 function printTileArrayGrid(length, width) {
     //let finalArrayGrid = [];
-    let hatLineNum = Math.floor(Math.random()*(length + 1));
+    let hatLineNum = Math.ceil(Math.random()*(length))
+    console.log(hatLineNum);
+
     for (let i=0;i<length;i++) {
-        if ( i == hatLineNum) {
+        if ( i === hatLineNum) {
             myArrayGrid.push(printHatArrayLine(width));
         } else {
         myArrayGrid.push(printTileArrayLine(width));
@@ -157,7 +159,7 @@ function printTileArrayGrid(length, width) {
     return myArrayGrid;
 }
 
-console.log(printTileArrayGrid(4,5));
+//console.log(printTileArrayGrid(4,5));
 /*
 //console.log(myArrayGrid);
 printTileArrayGrid(8,12);
@@ -203,31 +205,47 @@ console.log(xLocation(myArrayGrid,1,0));
 console.log(xLocation(myArrayGrid,1,1));
 console.log(xLocation(myArrayGrid,1,2));
 */
+let pathChar = pathCharacter; 
+let testPath = printTileArrayGrid(2,5);
+function myPath(array, p1, p2) {
+    array[p1].splice(p2, 1, pathChar); 
+    console.log(array);
+}
+//Testing myPath. Test PASSED
+/*
+console.log(myPath(testPath, 0, 0));
+console.log(myPath(testPath, 0, 1));
+console.log(myPath(testPath, 1, 1));
+*/
 function inputProcessor(userInput) {
     let newLocation = null;
     let myArr = myArrayGrid;
-    let len = 1;
-    let wid = 1;
+    let len = gp1;
+    let wid = gp2;
     if (userInput === "h") {
         //move left
         wid -= 1;
         newLocation = myArr[len][wid];
         //update the moving board
+        myPath(myArr, len, wid);
         winOrLose(newLocation);
     } else if (userInput === "j") {
         //functions
         len += 1;
         newLocation = myArr[len][wid];
+        myPath(myArr, len, wid);
         winOrLose(newLocation);
     } else if (userInput === "k") {
         //functions
         len -= 1;
         newLocation = myArr[len][wid];
+        myPath(myArr, len, wid);
         winOrLose(newLocation);
     } else if (userInput === "l") {
         //functions
         wid += 1;
         newLocation = myArr[len][wid];
+        myPath(myArr, len, wid);
         winOrLose(newLocation);
     } else {
       console.log("Please put in the correct direction inputs: h,j,k or l")
@@ -235,7 +253,14 @@ function inputProcessor(userInput) {
     console.log(newLocation);
 }
 
+console.log(printTileArrayGrid(4,5));
+let gp1 = 0
+let gp2 = 0
+myPath(myArrayGrid, gp1, gp2);
+console.log(myArrayGrid);
+
 let userInput = prompt("Please choose a direction using the hjkl keys : "); 
+/*
 console.log("Your starting location: ");
 console.log(myArrayGrid[1][1]);
 console.log(myArrayGrid[1]);
@@ -247,5 +272,6 @@ console.log("The next k location: ");
 console.log(myArrayGrid[0][1]);
 console.log("The next L location: ");
 console.log(myArrayGrid[1][2]);
+*/
 inputProcessor(userInput);
 
