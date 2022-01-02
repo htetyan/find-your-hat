@@ -5,6 +5,7 @@ const hole = "O";
 const fieldCharacter = "░";
 const pathCharacter = "*";
 let myArrayGrid = [];
+let loseMsg = "Game Over!";
 
 class Field {
     constructor(fieldArray) {
@@ -38,6 +39,15 @@ const myField = new Field([
 
 //myField.print();
 //myField.print2();
+
+function printer(arr) {
+    let fieldString = "";
+    for (let i = 0; i < arr.length; i++) {
+        fieldString += arr[i].join("");
+        fieldString += "\n";
+    }
+    console.log(fieldString);
+}
 
 //Function: Tile Random
 //What: Selects between either a hole or field character/string
@@ -108,7 +118,7 @@ function printHatLine(size) {
 //Output: Array that contains characters/strings
 function printHatArrayLine(size) {
     let helperArray = [];
-    let hatPositionNumber = Math.floor(Math.random() * size + 1);
+    let hatPositionNumber = Math.floor(Math.random() * size);
     for (let i = 0; i < size; i++) {
         if (i === hatPositionNumber) {
             helperArray.push(hat);
@@ -184,15 +194,20 @@ function xLocation(array, p1, p2) {
 //Oput: Message and/or calls a function to continue game
 
 function winOrLose(xloco) {
+    let gameCond = 0;
     if (xloco === hat) {
-        return console.log("You found your hat!");
+        //console.log("You found your hat!");
+        return (gameCond = 1);
     } else if (xloco === hole) {
-        return console.log("You fell into a whole, game over!");
+        //console.log(`You fell into a hole, ${loseMsg}`);
+        return (gameCond = 2);
     } else if (xloco === undefined) {
-        return console.log("You fell off the map! Game over!");
+        console.log(`You fell off the map, ${loseMsg}`);
+        return (gameCond = 3);
     } else {
         //continue game function?
-        return console.log("continue game");
+        //console.log("continue game");
+        return (gameCond = 4);
         //lose condition
         //off the edge
         //win condition
@@ -212,12 +227,15 @@ console.log(xLocation(myArrayGrid,1,2));
 let pathChar = pathCharacter;
 
 //Function Name: My Path
-//What: replaces the character/string in 2D array index location
+//What: replaces the character/string in 2D array index location, saves the new array to the main myArrayGrid, overrides the starting locations, prints the new array.
 //Input: Array, Number (index of 1st Array), Number (index of 2nd Array)
 //Output: Spliced original array
 function myPath(array, p1, p2) {
     array[p1].splice(p2, 1, pathChar);
-    console.log(array);
+    myArrayGrid = array;
+    gp1 = p1;
+    gp2 = p2;
+    printer(array);
 }
 //Testing myPath. Test PASSED
 /*
@@ -225,54 +243,87 @@ console.log(myPath(testPath, 0, 0));
 console.log(myPath(testPath, 0, 1));
 console.log(myPath(testPath, 1, 1));
 */
+//Function: Check Input
+//What: takes the current array and index positions, checks if the user fell off the map, if not, updates the location of the user character, calls the myPath function, checks the win or lose conditions and calls to continue the game
+//Input: Array, position at index i, position at index j
+//Output: Prints string or/and calls playGame function
+function checkInput(arr, p1, p2) {
+    if ((p1 || p2) < 0) {
+        return console.log(`You fell off the map, ${loseMsg}`);
+    }
+    newLocation = arr[p1][p2];
+    myPath(arr, p1, p2);
+
+    if (winOrLose(newLocation) === 1) {
+        return console.log("You found your hat! Thanks for playing!");
+    } else if (winOrLose(newLocation) === 2) {
+        console.log(`You fell into a hole, ${loseMsg}`);
+    } else if (winOrLose(newLocation) === 4) {
+        console.log("continue game");
+        playGame();
+    }
+}
 
 //Function Name: Input Processor
 //What it does: takes user input, and moves the character to different array index position.
 //Input: User input key
 //Output: Print array with updated characters, Print message of game status
 function inputProcessor(userInput) {
-    let newLocation = null; //Saves the grid char before input location is updated
+    let newLocation = []; //Saves the grid char before input location is updated
     let myArr = myArrayGrid;
     let len = gp1;
     let wid = gp2;
     if (userInput === "h") {
         //move left
         wid -= 1;
-        newLocation = myArr[len][wid]; //if -1, will result in an error, have to catch error here.
+        checkInput(myArr, len, wid);
+        //newLocation = myArr[len][wid]; //if -1, will result in an error, have to catch error here.
         //update the moving board
-        myPath(myArr, len, wid); //Prints new array with updated character location
-        winOrLose(newLocation);
+        //myPath(myArr, len, wid); //Prints new array with updated character location
+        //winOrLose(newLocation);
     } else if (userInput === "j") {
         //functions
         len += 1;
-        newLocation = myArr[len][wid];
+        checkInput(myArr, len, wid);
+        /*
+        newLocation = offGrid(myArr, len, wid);
         myPath(myArr, len, wid);
         winOrLose(newLocation);
+        */
     } else if (userInput === "k") {
         //functions
         len -= 1;
-        newLocation = myArr[len][wid];
+        checkInput(myArr, len, wid);
+        /*
+        newLocation = offGrid(myArr, len, wid);
         myPath(myArr, len, wid);
         winOrLose(newLocation);
+        */
     } else if (userInput === "l") {
         //functions
         wid += 1;
-        newLocation = myArr[len][wid];
-        myPath(myArr, len, wid);
-        winOrLose(newLocation);
+        checkInput(myArr, len, wid);
+        //newLocation = myArr[len][wid];
+        //myPath(myArr, len, wid);
+        //winOrLose(newLocation);
     } else {
         console.log("Please put in the correct direction inputs: h,j,k or l");
+        playGame();
     }
     console.log(newLocation);
 }
 
-console.log(printTileArrayGrid(4, 5));
+printTileArrayGrid(4, 5);
 let gp1 = 0;
 let gp2 = 0;
 myPath(myArrayGrid, gp1, gp2);
-console.log(myArrayGrid);
+//printer(myArrayGrid);
 
-let userInput = prompt("Please choose a direction using the hjkl keys : ");
+function playGame() {
+    let userInput = prompt("Please choose a direction using the hjkl keys : ");
+    inputProcessor(userInput);
+}
+playGame();
 /*
 console.log("Your starting location: ");
 console.log(myArrayGrid[1][1]);
@@ -286,5 +337,4 @@ console.log(myArrayGrid[0][1]);
 console.log("The next L location: ");
 console.log(myArrayGrid[1][2]);
 */
-inputProcessor(userInput);
 //prettier test
